@@ -1,14 +1,14 @@
 const express = require("express");
 const app = express();
 
-let broadcaster;
-const port = 4000;
-
 const http = require("http");
 const server = http.createServer(app);
 
 const io = require("socket.io")(server);
 app.use(express.static(__dirname + "/public"));
+
+let broadcaster;
+const port = 4000;
 
 io.sockets.on("error", (e) => console.log(e));
 io.sockets.on("connection", (socket) => {
@@ -32,4 +32,7 @@ io.sockets.on("connection", (socket) => {
     socket.to(broadcaster).emit("disconnectPeer", socket.id);
   });
 });
-server.listen(port, () => console.log(`Server is running on port ${port}`));
+
+server.listen(port, "0.0.0.0", () =>
+  console.log(`Server is running on port ${port}`)
+);
